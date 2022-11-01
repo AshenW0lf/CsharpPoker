@@ -1,30 +1,10 @@
 ﻿namespace CsharpPoker.Tests
 {
-    public class HandTests
+    public class FiveCardPokerScorerTests
     {
-        [Fact]
-        public void CanCreateHand()
-        {
-            var hand = new Hand();
-
-            hand.Cards.Any().Should().BeFalse();
-        }
-
-        [Theory, AutoData]
-        public void CanHandDrawCard(Card card)
-        {
-            // Arrange
-            var hand = new Hand();
-
-            // Act
-            hand.Draw(card);
-
-            //Assert
-            hand.Cards.First().Should().Be(card);
-        }
 
         [Fact]
-        public void CanScoreHighCard()
+        public void CanGetHighCard()
         {
             // Arrange
             var hand = new Hand();
@@ -36,8 +16,8 @@
             hand.Draw(new Card(CardValue.King, CardSuit.Hearts));
             hand.Draw(new Card(CardValue.Two, CardSuit.Hearts));
 
-            // Assert
-            hand.GetHandRank().Should().Be(HandRank.HighCard);
+            //Assert
+            FiveCardPokerScorer.HighCard(hand.Cards).Value.Should().Be(CardValue.King);
         }
 
         [Fact]
@@ -54,7 +34,7 @@
             hand.Draw(new Card(CardValue.Six, CardSuit.Spades));
 
             // Assert
-            hand.GetHandRank().Should().Be(HandRank.Flush);
+            FiveCardPokerScorer.HasFlush(hand.Cards).Should().BeTrue();
         }
 
         [Fact]
@@ -71,7 +51,7 @@
             hand.Draw(new Card(CardValue.Ace, CardSuit.Spades));
 
             // Assert
-            hand.GetHandRank().Should().Be(HandRank.RoyalFlush);
+            FiveCardPokerScorer.HasRoyalFlush(hand.Cards).Should().BeTrue();
         }
 
         [Fact]
@@ -88,7 +68,7 @@
             hand.Draw(new Card(CardValue.Ace, CardSuit.Spades));
 
             // Assert
-            hand.GetHandRank().Should().Be(HandRank.Pair);
+            FiveCardPokerScorer.HasPair(hand.Cards).Should().BeTrue();
         }
 
         [Fact]
@@ -105,7 +85,7 @@
             hand.Draw(new Card(CardValue.Jack, CardSuit.Spades));
 
             // Assert
-            hand.GetHandRank().Should().Be(HandRank.TwoPair);
+            FiveCardPokerScorer.HasTwoPair(hand.Cards).Should().BeTrue();
         }
 
         [Fact]
@@ -113,16 +93,16 @@
         {
             // Arrange
             var hand = new Hand();
-            
+
             // Act
             hand.Draw(new Card(CardValue.Ten, CardSuit.Clubs));
             hand.Draw(new Card(CardValue.Jack, CardSuit.Spades));
             hand.Draw(new Card(CardValue.Nine, CardSuit.Spades));
             hand.Draw(new Card(CardValue.Ten, CardSuit.Hearts));
             hand.Draw(new Card(CardValue.Ten, CardSuit.Spades));
-            
+
             // Assert
-            hand.GetHandRank().Should().Be(HandRank.ThreeOfAKind);
+            FiveCardPokerScorer.HasThreeOfAKind(hand.Cards).Should().BeTrue();
         }
 
         [Fact]
@@ -130,16 +110,16 @@
         {
             // Arrange
             var hand = new Hand();
-            
+
             // Act
             hand.Draw(new Card(CardValue.Ten, CardSuit.Clubs));
             hand.Draw(new Card(CardValue.Jack, CardSuit.Spades));
             hand.Draw(new Card(CardValue.Ten, CardSuit.Spades));
             hand.Draw(new Card(CardValue.Ten, CardSuit.Hearts));
             hand.Draw(new Card(CardValue.Ten, CardSuit.Spades));
-            
+
             // Assert
-            hand.GetHandRank().Should().Be(HandRank.FourOfAKind);
+            FiveCardPokerScorer.HasFourOfAKind(hand.Cards).Should().BeTrue();
         }
 
         [Fact]
@@ -147,16 +127,16 @@
         {
             // Arrange
             var hand = new Hand();
-            
+
             // Act
             hand.Draw(new Card(CardValue.Ten, CardSuit.Clubs));
             hand.Draw(new Card(CardValue.Jack, CardSuit.Spades));
             hand.Draw(new Card(CardValue.Ten, CardSuit.Spades));
             hand.Draw(new Card(CardValue.Jack, CardSuit.Hearts));
             hand.Draw(new Card(CardValue.Ten, CardSuit.Spades));
-            
+
             // Assert
-            hand.GetHandRank().Should().Be(HandRank.FullHouse);
+            FiveCardPokerScorer.HasFullHouse(hand.Cards).Should().BeTrue();
         }
 
         [Fact]
@@ -169,7 +149,7 @@
             hand.Draw(new Card(CardValue.King, CardSuit.Hearts));
             hand.Draw(new Card(CardValue.Ace, CardSuit.Spades));
 
-            hand.GetHandRank().Should().Be(HandRank.Straight);
+            FiveCardPokerScorer.HasStraight(hand.Cards).Should().BeTrue();
         }
 
         [Fact]
@@ -182,7 +162,7 @@
             hand.Draw(new Card(CardValue.Ten, CardSuit.Spades));
             hand.Draw(new Card(CardValue.King, CardSuit.Hearts));
 
-            hand.GetHandRank().Should().Be(HandRank.Straight);
+            FiveCardPokerScorer.HasStraight(hand.Cards).Should().BeTrue();
         }
 
         [Fact]
@@ -195,7 +175,7 @@
             hand.Draw(new Card(CardValue.Queen, CardSuit.Spades));
             hand.Draw(new Card(CardValue.King, CardSuit.Spades));
 
-            hand.GetHandRank().Should().Be(HandRank.StraightFlush);
+            FiveCardPokerScorer.HasStraightFlush(hand.Cards).Should().BeTrue();
         }
 
         [Fact]
@@ -208,7 +188,7 @@
             hand.Draw(new Card(CardValue.Ten, CardSuit.Spades));
             hand.Draw(new Card(CardValue.King, CardSuit.Spades));
 
-            hand.GetHandRank().Should().Be(HandRank.StraightFlush);
+            FiveCardPokerScorer.HasStraightFlush(hand.Cards).Should().BeTrue();
         }
     }
 }
