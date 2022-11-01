@@ -5,10 +5,6 @@ namespace CsharpPoker
     public class Hand
     {
         private readonly List<Card> _cards = new();
-        public Hand()
-        {
-
-        }
 
         public IEnumerable<Card> Cards => _cards;
 
@@ -37,16 +33,21 @@ namespace CsharpPoker
            .Zip(_cards.OrderBy(card => card.Value).Skip(1), (n, next) => n.Value + 1 == next.Value)
            .All(value => value);*/
 
-        public HandRank GetHandRank() =>
-            _cards.HasRoyalFlush() ? HandRank.RoyalFlush :
-            _cards.HasStraightFlush() ? HandRank.StraightFlush :
-            _cards.HasFlush() ? HandRank.Flush :
-            _cards.HasStraight() ? HandRank.Straight :
-            _cards.HasFullHouse() ? HandRank.FullHouse :
-            _cards.HasFourOfAKind() ? HandRank.FourOfAKind :
-            _cards.HasThreeOfAKind() ? HandRank.ThreeOfAKind :
-            _cards.HasTwoPair() ? HandRank.TwoPair :
-            _cards.HasPair() ? HandRank.Pair :
-            HandRank.HighCard;
+        public HandRank GetHandRank() => Rankings().First(x=>x.eval.Invoke(_cards)).
+
+        private List<(Func<IEnumerable<Card>, bool> eval, HandRank rank)> Rankings() =>
+            new()
+            {
+                { new((cards) => cards.HasRoyalFlush(), HandRank.RoyalFlush) },
+                { new((cards) => cards.HasStraightFlush(), HandRank.StraightFlush) },
+                { new((cards) => cards.HasFlush(), HandRank.Flush) },
+                { new((cards) => cards.HasStraight(), HandRank.Straight) },
+                { new((cards) => cards.HasFullHouse(), HandRank.FullHouse) },
+                { new((cards) => cards.HasFourOfAKind(), HandRank.FourOfAKind) },
+                { new((cards) => cards.HasThreeOfAKind(), HandRank.ThreeOfAKind) },
+                { new((cards) => cards.HasTwoPair(), HandRank.TwoPair) },
+                { new((cards) => cards.HasPair(), HandRank.Pair) },
+                { new((cards) => true, HandRank.HighCard) },
+            };
     }
 }
