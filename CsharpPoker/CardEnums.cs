@@ -1,6 +1,5 @@
 ﻿namespace CsharpPoker
 {
-    // CardValue.cs
     public enum CardValue
     {
         Two = 2,
@@ -18,12 +17,25 @@
         Ace
     }
 
-    // CardSuit.cs
     public enum CardSuit
     {
         Spades,
         Diamonds,
         Clubs,
         Hearts
+    }
+
+    public enum HandRank
+    {
+        HighCard,
+        Pair,
+        TwoPair,
+        ThreeOfAKind,
+        Straight,
+        Flush,
+        FullHouse,
+        FourOfAKind,
+        StraightFlush,
+        RoyalFlush
     }
 }
